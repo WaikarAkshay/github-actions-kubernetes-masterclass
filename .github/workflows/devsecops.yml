@@ -1,0 +1,14 @@
+name: EndToEnd DevSecOps
+on: 
+  push:
+    branches: ["development"]
+    paths-ignore:
+      - 'k8s/**'
+      - 'argocd/**'
+      - 'docs/**'
+      - '**/*.md'
+      - 'terraform/**'    
+      - 'terraform-env/**'
+      - 'Makefile'
+      - 'state-backend/**'
+      - 'images/**'

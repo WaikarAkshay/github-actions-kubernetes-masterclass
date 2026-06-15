@@ -20,38 +20,33 @@ services:
       timeout: 5s
       retries: 10
       start_period: 30s
-    
+
   backend:
-    image: ${DOCKERHUB_USERNAME}/skillpulse-backend:latest
+    image: ${DOCKERHUB_USERNAME}/backend-app:latest
     build: ./backend
     restart: unless-stopped
-    networks:
-      - skillpulse
     environment:
-      DB_HOST: db
-      DB_PORT: "3306"
+      DB_HOST: ${DB_HOST}
       DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
-      PORT: "8080"
-  
-    depends_on:
-      db:
-        condition: service_healthy
-
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_PORT: "3306"
+      port: "8080"
+    networks:
+    - skillpulse   
   frontend:
-    image: ${DOCKERHUB_USERNAME}/skillpulse-frontend:latest
+    image: ${DOCKERHUB_USERNAME}/frontend-app:latest
     build: ./frontend
     restart: unless-stopped
-    networks:
-      - skillpulse
     ports:
-      - "80:80"
+    - "80:80"
+    networks:
+    - skillpulse
     depends_on:
-      - backend
-
+    - backend
 volumes:
   mysql_data:
 
 networks:
   skillpulse:
+  
