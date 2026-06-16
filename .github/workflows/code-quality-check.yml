@@ -55,6 +55,9 @@ jobs:
       with:
         node-map: '22'
 
+    - name: Install HTMLHint
+      run: npm install -g htmlhint
+
     - name: Run Linter
       run: htmlhint "**/*.html"
 
