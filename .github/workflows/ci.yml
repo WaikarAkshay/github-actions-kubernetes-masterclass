@@ -1,13 +1,14 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
-    paths-ignore:
-      - 'k8s/**'
-      - 'docs/**'
-      - '**/*.md'
-
+  # push:
+  #   branches: [main]
+  #   paths-ignore:
+  #     - 'k8s/**'
+  #     - 'docs/**'
+  #     - '**/*.md'
+  workflow_dispatch:
+    
 jobs:
   build-and-push:
     runs-on: ubuntu-latest

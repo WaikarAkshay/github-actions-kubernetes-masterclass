@@ -1,14 +1,36 @@
 name: EndToEnd DevSecOps
 on: 
-  push:
-    branches: ["development"]
-    paths-ignore:
-      - 'k8s/**'
-      - 'argocd/**'
-      - 'docs/**'
-      - '**/*.md'
-      - 'terraform/**'    
-      - 'terraform-env/**'
-      - 'Makefile'
-      - 'state-backend/**'
-      - 'images/**'
+  # push:
+  #   branches: ["development"]
+  #   paths-ignore:
+  #     - 'k8s/**'
+  #     - 'argocd/**'
+  #     - 'docs/**'
+  #     - '**/*.md'
+  #     - 'terraform/**'    
+  #     - 'terraform-env/**'
+  #     - 'Makefile'
+  #     - 'state-backend/**'
+  #     - 'images/**'
+  workflow_dispatch:
+    
+jobs:
+    code-quality:
+      uses: ./.github/workflows/code-quality-check.yml
+
+    secret-scan:
+      uses: ./.github/workflows/secret-scan.yml
+
+    dockerfile-lint:
+      uses: ./.github/workflows/dockerfile-lint.yml
+
+    build-and-push:
+      needs: [code-quality, secret-scan, dockerfile-lint]
+      uses: ./.github/workflows/docker-build-push.yml
+      secrets: inherit
+
+    image-scan:
+      needs: [build-and-push] 
+      uses: ./.github/workflows/image-scan.yml
+      secrets: inherit
+    
