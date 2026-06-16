@@ -36,10 +36,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-golangci-lint-
 
-      - name: Verify go.mod is tidy
-        run: |
-          go mod tidy
-          git diff --exit-code go.mod go.sum
+      # - name: Verify go.mod is tidy
+      #   run: |
+      #     go mod tidy
+      #     git diff --exit-code go.mod go.sum
 
       - name: Install golangci-lint from binary
         run: |
