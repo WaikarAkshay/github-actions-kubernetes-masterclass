@@ -6,7 +6,7 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
-.trivyignore
+
 # Local env files
 .env
 .env.local
