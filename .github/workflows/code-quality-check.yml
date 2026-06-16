@@ -10,42 +10,48 @@ on:
   # workflow_dispatch:
     
 jobs:
-  backend-code-validation:
+  validate-backend:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: backend
+
     steps:
-    - name: Checkout source code 
-      uses: actions/checkout@v4
 
-    - name: Setup Go
-      uses: actions/setup-go@v5
-      with:
-        go-version: '1.26.3'
-        cache: true
-        cache-dependency-path: go.sum
+      - name: code checkout
+        uses: actions/checkout@v4
 
-    - name: Check formatting 
-      run: | 
-        unformatted=$(gofmt -l .) 
-        if [ -n "$unformatted" ]; 
-        then echo "The following files are not formatted:" 
-        echo "$unformatted" exit 1 
-        fi
-    - name: Verify go.mod is tidy
-      run: |
-        go mod tidy
-        git diff --exit-code go.mod go.sum
-    
-    
-    
-    - name: Run golangci-lint 
-      uses: golangci/golangci-lint-action@v8 
-      with: 
-        working-directory: backend
-        version: latest
-        latest args: --timeout=5m 
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.3'
+          cache: true
+          cache-dependency-path: go.sum
+
+      - name: golangci-lint Cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/golangci-lint
+          key: ${{ runner.os }}-golangci-lint-${{ hashFiles('backend/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-golangci-lint-
+
+      - name: Verify go.mod is tidy
+        run: |
+          go mod tidy
+          git diff --exit-code go.mod go.sum
+
+      - name: Install golangci-lint from binary
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.9.0
+
+      - name: Run golangci-lint
+        run: golangci-lint run --timeout=5m
+
+      - name: Run Gosec Security Scanner
+        uses: securego/gosec@master
+        with:
+          args: './...' 
 
   frontend-code-validation:
     runs-on: ubuntu-latest
