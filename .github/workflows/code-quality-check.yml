@@ -6,16 +6,8 @@ on:
   # push:
   #   branches: [developmemt]
   #   paths-ignore:
-  #     - 'k8s/**'
-  #     - 'argocd/**'
-  #     - 'docs/**'
-  #     - '**/*.md'
-  #     - 'terraform/**'    
-  #     - 'terraform-env/**'
-  #     - 'Makefile'
-  #     - 'state-backend/**'
-  #     - 'images/**'
-  workflow_dispatch:
+  #     
+  # workflow_dispatch:
     
 jobs:
   backend-code-validation:
