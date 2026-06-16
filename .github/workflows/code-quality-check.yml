@@ -62,12 +62,14 @@ jobs:
       run: htmlhint "**/*.html"
 
     - name: Lint CSS
+      working-directory: ./frontend
       run: |
         echo '{"rules": {"color-no-invalid-hex": true, "block-no-empty": true}}' > .stylelintrc.json
         npx stylelint "**/*.css" --config .stylelintrc.json
         
 
     - name: Lint JS
+      working-directory: ./frontend
       run: |
         echo 'export default [{ languageOptions: { globals: { window: "readonly", document: "readonly", localStorage: "readonly", fetch: "readonly", confirm: "readonly", setTimeout: "readonly", console: "readonly" } }, rules: { "no-undef": "error" } }];' > eslint.config.js
         npx eslint "**/*.js" --no-config-lookup --config eslint.config.js
