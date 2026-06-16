@@ -37,6 +37,7 @@ jobs:
     - name: Run golangci-lint 
       uses: golangci/golangci-lint-action@v8 
       with: 
+        working-directory: backend
         version: latest
         latest args: --timeout=5m 
 
@@ -44,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: backend
+        working-directory: ./backend
 
     steps:
     - name: Checkout source code
